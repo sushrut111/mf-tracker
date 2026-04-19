@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Mutual Fund AI Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>India Mutual Fund AI Tracker</h1>
+    <p class="subtitle">Analyze, compare, and track Indian mutual funds using public NAV data.</p>
+  </header>
+
+  <main class="container">
+    <section class="card" id="find-funds">
+      <h2>1) Find Mutual Funds</h2>
+      <div class="row">
+        <input id="search-input" type="text" placeholder="Type scheme name (e.g., SBI Small Cap)" />
+        <button id="search-btn" class="btn btn-primary">Search</button>
+      </div>
+      <p class="hint">Select up to 3 funds for comparison.</p>
+      <div id="search-results" class="results-list"></div>
+    </section>
+
+    <section class="card" id="compare-graph">
+      <h2>2) Compare &amp; Graph</h2>
+      <div class="row">
+        <button id="compare-btn" class="btn btn-primary">Compare Selected Funds</button>
+        <button id="clear-selection-btn" class="btn btn-secondary">Clear Selection</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="nav-chart" aria-label="NAV chart" role="img"></canvas>
+      </div>
+      <div id="metrics-panel" class="metrics-grid"></div>
+    </section>
+
+    <section class="card" id="portfolio-tracker">
+      <h2>3) Portfolio Tracker</h2>
+      <div class="grid-3">
+        <label>
+          Scheme Code
+          <input id="portfolio-scheme-code" type="number" min="1" placeholder="e.g., 119551" />
+        </label>
+        <label>
+          Units Held
+          <input id="portfolio-units" type="number" min="0" step="0.0001" placeholder="e.g., 42.5" />
+        </label>
+        <label>
+          Avg Buy NAV
+          <input id="portfolio-avg-nav" type="number" min="0" step="0.0001" placeholder="e.g., 50.2" />
+        </label>
+      </div>
+
+      <div class="row">
+        <button id="portfolio-add-update" class="btn btn-primary">Add/Update</button>
+        <button id="portfolio-refresh" class="btn btn-secondary">Refresh Portfolio NAV</button>
+        <button id="portfolio-clear" class="btn btn-danger">Clear Portfolio</button>
+      </div>
+
+      <div class="pdf-import card-sub">
+        <h3>Import from Folio PDF</h3>
+        <div class="row">
+          <input id="pdf-input" type="file" accept="application/pdf" />
+          <button id="pdf-import-btn" class="btn btn-secondary">Import Holdings from PDF</button>
+        </div>
+        <textarea id="pdf-status" rows="4" readonly placeholder="Import status messages will appear here..."></textarea>
+      </div>
+
+      <div id="portfolio-summary" class="summary-panel"></div>
+      <div class="table-wrap">
+        <table id="portfolio-table">
+          <thead>
+            <tr>
+              <th>Scheme Code</th>
+              <th>Scheme Name</th>
+              <th>Units</th>
+              <th>Avg NAV</th>
+              <th>Latest NAV</th>
+              <th>Invested</th>
+              <th>Current</th>
+              <th>P/L</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="ai-advice">
+      <h2>4) AI Investment Advice</h2>
+      <div class="grid-4">
+        <label>
+          Monthly SIP (₹)
+          <input id="sip-amount" type="number" min="500" step="500" value="5000" />
+        </label>
+        <label>
+          Horizon (Years)
+          <input id="horizon-years" type="number" min="1" max="40" value="10" />
+        </label>
+        <label>
+          Risk Profile
+          <select id="risk-profile">
+            <option value="conservative">Conservative</option>
+            <option value="moderate" selected>Moderate</option>
+            <option value="aggressive">Aggressive</option>
+          </select>
+        </label>
+        <label>
+          Emergency Fund Ready?
+          <select id="emergency-fund">
+            <option value="yes" selected>Yes</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <button id="generate-advice" class="btn btn-primary">Generate AI Advice</button>
+      </div>
+      <div id="advice-output" class="advice-panel"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Disclaimer: This tool is for education and tracking only. It is not financial advice. Mutual fund investments are subject to market risks.
+    </p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
