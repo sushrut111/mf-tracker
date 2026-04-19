@@ -382,15 +382,15 @@ function renderPortfolio() {
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${h.schemeCode}</td>
-      <td>${escapeHTML(h.schemeName)}</td>
-      <td>${fmt(h.units)}</td>
-      <td>₹${fmt(h.avgNav)}</td>
-      <td>${h.latestNav ? `₹${fmt(h.latestNav)}` : 'N/A'}</td>
-      <td>₹${fmt(invested)}</td>
-      <td>${current ? `₹${fmt(current)}` : 'N/A'}</td>
-      <td class="${pl >= 0 ? 'pl-positive' : 'pl-negative'}">${current ? `₹${fmt(pl)}` : 'N/A'}</td>
-      <td><button class="btn btn-danger" data-remove="${h.schemeCode}">Remove</button></td>
+      <td data-label="Scheme Code">${h.schemeCode}</td>
+      <td data-label="Scheme Name">${escapeHTML(h.schemeName)}</td>
+      <td data-label="Units">${fmt(h.units)}</td>
+      <td data-label="Avg NAV">₹${fmt(h.avgNav)}</td>
+      <td data-label="Latest NAV">${h.latestNav ? `₹${fmt(h.latestNav)}` : 'N/A'}</td>
+      <td data-label="Invested">₹${fmt(invested)}</td>
+      <td data-label="Current">${current ? `₹${fmt(current)}` : 'N/A'}</td>
+      <td data-label="P/L" class="${pl >= 0 ? 'pl-positive' : 'pl-negative'}">${current ? `₹${fmt(pl)}` : 'N/A'}</td>
+      <td data-label="Actions"><button class="btn btn-danger" data-remove="${h.schemeCode}">Remove</button></td>
     `;
     el.pTableBody.appendChild(tr);
   });

@@ -26,6 +26,11 @@ body {
   padding: 2rem 1rem 1rem;
 }
 
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.4vw, 2rem);
+}
+
 .subtitle {
   color: var(--muted);
   margin-top: .5rem;
@@ -59,6 +64,12 @@ body {
   gap: .65rem;
   flex-wrap: wrap;
   margin: .5rem 0;
+  align-items: center;
+}
+
+.row > input,
+.row > select {
+  flex: 1 1 240px;
 }
 
 .grid-3,
@@ -194,5 +205,83 @@ footer {
 }
 
 @media (max-width: 640px) {
+  .app-header {
+    padding: 1.25rem .8rem .75rem;
+  }
+
+  .container {
+    width: min(1100px, 96%);
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+
+  .card {
+    border-radius: 12px;
+    padding: .8rem;
+  }
+
+  .row {
+    gap: .5rem;
+  }
+
+  .row > * {
+    width: 100%;
+  }
+
   .btn { width: 100%; }
+
+  .chart-wrap {
+    padding: .55rem;
+    overflow-x: auto;
+  }
+
+  #nav-chart {
+    min-height: 240px;
+  }
+
+  #portfolio-table {
+    min-width: 0;
+    border: 0;
+  }
+
+  #portfolio-table thead {
+    display: none;
+  }
+
+  #portfolio-table,
+  #portfolio-table tbody,
+  #portfolio-table tr,
+  #portfolio-table td {
+    display: block;
+    width: 100%;
+  }
+
+  #portfolio-table tr {
+    margin-bottom: .75rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  #portfolio-table td {
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    padding: .55rem .65rem;
+  }
+
+  #portfolio-table td:last-child {
+    border-bottom: 0;
+  }
+
+  #portfolio-table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    margin-bottom: .2rem;
+  }
 }
