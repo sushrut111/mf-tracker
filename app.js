@@ -43,13 +43,67 @@ init();
 
 async function init() {
   bindEvents();
-  if (window.pdfjsLib) {
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
-  }
+  await ensurePdfJsAvailable();
   await loadFundList();
   renderSearchResults(state.fundList.slice(0, 30));
   renderPortfolio();
+}
+
+async function ensurePdfJsAvailable() {
+  if (window.pdfjsLib) {
+    setPdfWorker();
+    return true;
+  }
+
+  const scriptCandidates = [
+    {
+      lib: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js',
+      worker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js',
+    },
+    {
+      lib: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.js',
+      worker: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.worker.min.js',
+    },
+  ];
+
+  for (const candidate of scriptCandidates) {
+    try {
+      await loadScript(candidate.lib);
+      if (window.pdfjsLib) {
+        setPdfWorker(candidate.worker);
+        return true;
+      }
+    } catch (err) {
+      console.warn('Failed to load pdf.js from', candidate.lib, err);
+    }
+  }
+
+  updatePdfStatus('Unable to load pdf.js from CDN. Please check internet access and retry.');
+  return false;
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (window.pdfjsLib) resolve();
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+function setPdfWorker(src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js') {
+  if (!window.pdfjsLib) return;
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = src;
 }
 
 function bindEvents() {
@@ -412,6 +466,10 @@ async function importFromPdf() {
   if (!file) {
     updatePdfStatus('Please choose a PDF file first.');
     return;
+  }
+
+  if (!window.pdfjsLib) {
+    await ensurePdfJsAvailable();
   }
 
   if (!window.pdfjsLib) {
